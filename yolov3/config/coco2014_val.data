@@ -1,0 +1,4 @@
+classes= 80
+train=H:\deepLearning\dataset\COCO2014\train.txt
+valid=H:\deepLearning\dataset\COCO2014\valid.txt
+names=H:\deepLearning\dataset\COCO2014\yolov3\classes.names
