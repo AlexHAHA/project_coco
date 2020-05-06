@@ -144,15 +144,16 @@ def test1():
     ac.convert()   
 
 def test2():
-    path_source_anno = r"H:\deepLearning\dataset\visdrone_mAP\map_truckerror\input\detection_results_yolo"
-    path_source_img  = r"H:\deepLearning\dataset\visdrone_mAP\map_truckerror\input\images"
-    path_target_anno = r"H:\deepLearning\dataset\visdrone_mAP\map_truckerror\input\detection_results"
+    path_source_anno = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3\input\ground_truth_yolo"
+    path_source_img  = r"H:\deepLearning\dataset\COCO2014\val2014\val2014"
+    path_target_anno = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3\input\ground_truth"
     bbox_ct = ccwh_2_xyxy
     unit_ct = unit_n2p
     columns = [1,2,3,4]
+    print(f"convert begin!")
     ac = AnnotationConver(path_source_anno,path_source_img,path_target_anno,
                           bbox_ct, unit_ct, columns)
     ac.convert()        
-
+    print(f"convert done!")
 if __name__ == '__main__':
     test2()

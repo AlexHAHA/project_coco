@@ -44,10 +44,14 @@ class MAP_Calculator(object):
     MINOVERLAP = 0.5
     def __init__(self, path_mAP):
         self.path_base = path_mAP
-        self.path_gt   = os.path.join(self.path_base, 'input', 'ground_truth')
-        self.path_dr   = os.path.join(self.path_base, 'input', 'detection_results')
-        self.path_img  = os.path.join(self.path_base, 'input', 'images')
-        self.file_class_names = os.path.join(self.path_base, 'input', 'class.names')
+        #self.path_gt   = os.path.join(self.path_base, 'input', 'ground_truth')
+        self.path_gt = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3\input\ground_truth"
+        #self.path_dr   = os.path.join(self.path_base, 'input', 'detection_results')
+        self.path_dr = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3\detection_results\labels"
+        #self.path_img  = os.path.join(self.path_base, 'input', 'images')
+        self.path_img = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3\detection_results\images"
+        #self.file_class_names = os.path.join(self.path_base, 'input', 'class.names')
+        self.file_class_names = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3\input\classes.names"
 
         if not os.path.exists(self.path_gt):
             print("Error: no ground_truth folder exists")
@@ -112,6 +116,7 @@ class MAP_Calculator(object):
         从ground_truth文件夹加载数据，得到：
         self.gt_counter_images_per_class
         '''
+        print(f"Begin load grount-truth data")
         #self.files_gt = os.listdir(self.path_gt)
         self.files_gt = glob.glob(self.path_gt + r'\*.txt')
         self.files_gt.sort()
@@ -162,6 +167,8 @@ class MAP_Calculator(object):
         self.n_classes      = len(self.gt_classes_idx)
 
     def load_dr_data(self):
+        print(f"Begin load detection-results data")
+        print(f"self.path_gt={self.path_gt}")
         '''
         从detection_results文件夹中加载数据，获取每个类别所有目标的信息(confidence,bbox)，并按照confidence由大到小
         对目标信息进行排序，并将每个类别的目标信息存放到同名的.json文件中。
@@ -192,11 +199,11 @@ class MAP_Calculator(object):
             for txt_file in self.files_dr:
                 #print(f'txt_file={os.path.basename(txt_file)}')
                 file_id = os.path.basename(txt_file).split(".txt",1)[0]
-                txt_path_dr = os.path.join(self.path_dr, txt_file)
-                txt_path_gt = os.path.join(self.path_gt, txt_file)
+                txt_path_dr = os.path.join(self.path_dr, file_id+".txt")
+                txt_path_gt = os.path.join(self.path_gt, file_id+".txt")
 
                 if not os.path.exists(txt_path_gt):
-                    print(f"Error: corespond file {txt_file} not exist in ground_truth folder")
+                    #print(f"Error: corespond file {txt_file} not exist in ground_truth folder")
                     continue
                 #
                 lines = self.__load_txt(txt_path_dr)
@@ -221,6 +228,7 @@ class MAP_Calculator(object):
          1. 图片中的每个gt_bbox只能被匹配一次，也就是说若有多个同类目标的dr_bbox都与一个gt_bbox匹配了，那么只有第一个匹配上的dr_bbox的tp=True，
             所以在调试的时候非常注意，每次本函数运行前都需要重新运行一下load_gt_data()以重新加载self.gt_files_infos变量。
         '''
+        print(f"Begin ap calculating")
         sum_AP = 0.0
         # open file to store the output
         with open(os.path.join(self.path_output, 'output.txt'), 'w') as output_file:
@@ -591,7 +599,7 @@ class MAP_Calculator(object):
         plt.close()        
 
 #path_mAP = r"H:\deepLearning\dataset\visdrone\Task 1 - Object Detection in Images\VisDrone2019-DET-val\mAP"
-path_mAP = r"H:\deepLearning\dataset\visdrone_mAP\map_truckerror"
+path_mAP = r"H:\deepLearning\dataset\COCO2014\yolov3\map_yolov3"
 if __name__ == '__main__':
     mc = MAP_Calculator(path_mAP)
 
